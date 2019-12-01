@@ -70,7 +70,7 @@ const seedProperties = () => {
 const seedImages = () => {
   for (let i = 1; i < 101; i += 1) {
     const imageUrl = 'aslfjaljfhdjfhksdfhio.jpg';
-    const numPhotos = Math.floor(Math.random() * (35 - 15)) + 15;
+    const numPhotos = Math.floor(Math.random() * (35 - 20)) + 20;
     const propId = i;
     for (let h = 0; h < numPhotos; h += 1) {
       Image.sync({}).then(() => Image.create({

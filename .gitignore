@@ -24,3 +24,5 @@ coverage
 build/
 dist/
 
+# Authentication
+authentication.js
