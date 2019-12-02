@@ -59,7 +59,7 @@ const seedProperties = () => {
     const address = faker.address.streetAddress();
     const beds = Math.ceil(Math.random() * 5);
     const baths = Math.ceil(beds / 2);
-    Property.sync({}).then(() => Property.create({
+    Property.sync({ force: true }).then(() => Property.create({
       address,
       beds,
       baths,
@@ -73,7 +73,7 @@ const seedImages = () => {
     const numPhotos = Math.floor(Math.random() * (35 - 20)) + 20;
     const propId = i;
     for (let h = 0; h < numPhotos; h += 1) {
-      Image.sync({}).then(() => Image.create({
+      Image.sync({ force: true }).then(() => Image.create({
         propId,
         imageUrl,
       }));
@@ -83,3 +83,8 @@ const seedImages = () => {
 
 seedProperties();
 seedImages();
+
+module.exports = {
+  Property,
+  Image,
+};
