@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+// eslint-disable-next-line no-unused-vars
 const Sequelize = require('sequelize');
 const { Property, Image } = require('./../database/seed.js');
 
@@ -10,9 +11,9 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/api/images', (req, res) => {
+app.get('/api/images/:propertyId', (req, res) => {
   const info = {};
-  const propertyId = Math.floor(Math.random() * 100 + 1);
+  const { propertyId } = req.params;
   // console.log(Property);
   // res.send(Property);
 
