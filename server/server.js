@@ -17,11 +17,17 @@ app.get('/api/images/:propertyId', (req, res) => {
   // console.log(Property);
   // res.send(Property);
 
-  Property.findOne({ where: { id: propertyId } })
+  Property.findOne({
+    attributes: ['id', 'address', 'baths', 'beds'],
+    where: { id: propertyId },
+  })
     .then((property) => {
       info.property = property;
     })
-    .then(() => Image.findAll({ where: { propId: propertyId } }))
+    .then(() => Image.findAll({
+      attributes: ['propId', 'imageUrl'],
+      where: { propId: propertyId },
+    }))
     .then((images) => {
       info.images = images;
       res.send(info);
