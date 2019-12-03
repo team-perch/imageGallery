@@ -14,8 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/api/images/:propertyId', (req, res) => {
   const info = {};
   const { propertyId } = req.params;
-  // console.log(Property);
-  // res.send(Property);
 
   Property.findOne({ where: { id: propertyId } })
     .then((property) => {
