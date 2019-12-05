@@ -27,7 +27,13 @@ class App extends React.Component {
     $.ajax({
       type: 'GET',
       url: `/api/images/${siteId}`,
-      success: (data) => { this.setState({ info: data }); },
+      success: (data) => {
+        for (var i = 0; i < data.images.length; i += 1) {
+          data.images[i].index = i;
+        }
+        console.log(data);
+        this.setState({ info: data });
+      },
     });
   }
 
