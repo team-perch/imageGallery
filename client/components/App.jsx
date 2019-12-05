@@ -2,11 +2,13 @@ import React from 'react';
 import $ from 'jquery';
 // import styled from 'styled-components';
 import ImageWindow from './imageWindow.jsx';
+import GalleryView from './galleryView.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      status: 'imageWindow',
       info: {
         property: {
           address: '',
@@ -17,6 +19,7 @@ class App extends React.Component {
       },
     };
     this.getInfo = this.getInfo.bind(this);
+    this.changeStatus = this.changeStatus.bind(this);
   }
 
   componentDidMount() {
@@ -37,12 +40,28 @@ class App extends React.Component {
     });
   }
 
+  changeStatus() {
+    if (this.state.status === 'imageWindow') {
+      this.setState({ status: 'galleryView' });
+    } else {
+      this.setState({ status: 'imageWindow' });
+    }
+  }
+
   render() {
-    return (
-      <div>
-        <ImageWindow info={this.state.info} />
-      </div>
-    );
+    if (this.state.status === 'imageWindow') {
+      return (
+        <div>
+          <ImageWindow info={this.state.info} />
+        </div>
+      );
+    } else if (this.state.status === 'galleryView') {
+      return (
+        <div>
+          <GalleryView />
+        </div>
+      );
+    }
   }
 }
 

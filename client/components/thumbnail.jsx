@@ -24,7 +24,7 @@ function Thumbnail(props) {
   `;
   return(
     <div>
-      {props.images.map((image,) => (
+      {props.images.map((image) => (
         <Vieport>
           <PhotoThumbnail>
             <ImageThumbnail onClick={props.handleClick} src={image.imageUrl} alt={image.index} />
