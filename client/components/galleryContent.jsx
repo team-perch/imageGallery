@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import GalleryPhotos from './galleryPhotos.jsx';
 
 function GalleryContent(props) {
   const DialogContent = styled.div`
@@ -42,10 +43,10 @@ function GalleryContent(props) {
           <PhotoList>
             <CenterRow>
               <PhotoColumn>
-                <GalleryPhotos image={props.images[0]} />
+                {props.images.slice(0, Math.floor(props.images.length / 2)).map((image) => <GalleryPhotos image={image} />)}
               </PhotoColumn>
               <PhotoColumn>
-
+                {props.images.slice(Math.floor(props.images.length / 2)).map((image) => <GalleryPhotos image={image} />)}
               </PhotoColumn>
             </CenterRow>
           </PhotoList>
