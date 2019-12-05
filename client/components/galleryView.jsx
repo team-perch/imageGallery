@@ -15,11 +15,10 @@ function GalleryView(props) {
     flex-direction: column;
     width: 100%;
   `;
-
   return (
     <DialogContainer>
       <GalleryHeader info={props.info} changeStatus={props.changeStatus} />
-      <GalleryContent info={props.info} />
+      <GalleryContent images={props.info.images} />
     </DialogContainer>
   );
 }
