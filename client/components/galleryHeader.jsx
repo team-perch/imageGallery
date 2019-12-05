@@ -39,23 +39,23 @@ function GalleryHeader(props) {
     overflow: hidden;
     text-overflow: ellipsis;
     color: #333;
-    font-family: Verdana;
+    font-family: Libre Franklin;
     font-size: 16px;
   `;
-  return(
+  return (
     <DialogHeader>
-        <AddressHeader>
-          <HeaderElement onClick={props.changeStatus}>
-            <SvgIcon>
-              <svg viewBox="0 0 24 24">
-                <path d="M 4.724 10.603 l 6.117 -6.115 a 0.25 0.25 0 0 0 0 -0.355 l -1.06 -1.06 a 0.25 0.25 0 0 0 -0.355 0 l -8.352 8.354 a 0.25 0.25 0 0 0 0 0.353 l 8.352 8.354 a 0.25 0.25 0 0 0 0.355 0 l 1.06 -1.06 a 0.25 0.25 0 0 0 0 -0.354 l -6.117 -6.117 H 23.06 a 0.25 0.25 0 0 0 0.25 -0.25 v -1.5 a 0.25 0.25 0 0 0 -0.25 -0.25 H 4.724 Z" fillRule="evenodd"></path>
-              </svg>
-            </SvgIcon>
-            <HeaderTitle>{props.info.property.address}</HeaderTitle>
-          </HeaderElement>
-        </AddressHeader>
-      </DialogHeader>
-  )
+      <AddressHeader>
+        <HeaderElement onClick={props.changeStatus}>
+          <SvgIcon>
+            <svg viewBox="0 0 24 24">
+              <path d="M 4.724 10.603 l 6.117 -6.115 a 0.25 0.25 0 0 0 0 -0.355 l -1.06 -1.06 a 0.25 0.25 0 0 0 -0.355 0 l -8.352 8.354 a 0.25 0.25 0 0 0 0 0.353 l 8.352 8.354 a 0.25 0.25 0 0 0 0.355 0 l 1.06 -1.06 a 0.25 0.25 0 0 0 0 -0.354 l -6.117 -6.117 H 23.06 a 0.25 0.25 0 0 0 0.25 -0.25 v -1.5 a 0.25 0.25 0 0 0 -0.25 -0.25 H 4.724 Z" fillRule="evenodd"/>
+            </svg>
+          </SvgIcon>
+          <HeaderTitle>{props.info.property.address}</HeaderTitle>
+        </HeaderElement>
+      </AddressHeader>
+    </DialogHeader>
+  );
 }
 
 export default GalleryHeader;

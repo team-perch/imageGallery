@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import GalleryHeader from './galleryHeader.jsx';
 import GalleryContent from './galleryContent.jsx';
+import GalleryFooter from './galleryFooter.jsx';
 
 function GalleryView(props) {
   const DialogContainer = styled.div`
@@ -19,6 +20,7 @@ function GalleryView(props) {
     <DialogContainer>
       <GalleryHeader info={props.info} changeStatus={props.changeStatus} />
       <GalleryContent images={props.info.images} />
+      <GalleryFooter info={props.info} />
     </DialogContainer>
   );
 }

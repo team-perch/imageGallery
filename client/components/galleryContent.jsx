@@ -43,10 +43,12 @@ function GalleryContent(props) {
           <PhotoList>
             <CenterRow>
               <PhotoColumn>
-                {props.images.slice(0, Math.floor(props.images.length / 2)).map((image) => <GalleryPhotos image={image} />)}
+                {props.images.slice(0, Math.floor(props.images.length / 2)).map((image) => (
+                  <GalleryPhotos image={image} />))}
               </PhotoColumn>
               <PhotoColumn>
-                {props.images.slice(Math.floor(props.images.length / 2)).map((image) => <GalleryPhotos image={image} />)}
+                {props.images.slice(Math.floor(props.images.length / 2)).map((image) => (
+                  <GalleryPhotos image={image} />))}
               </PhotoColumn>
             </CenterRow>
           </PhotoList>
