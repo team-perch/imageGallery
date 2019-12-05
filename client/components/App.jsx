@@ -31,17 +31,19 @@ class App extends React.Component {
       type: 'GET',
       url: `/api/images/${siteId}`,
       success: (data) => {
-        for (var i = 0; i < data.images.length; i += 1) {
-          data.images[i].index = i;
+        const property = data;
+        for (let i = 0; i < data.images.length; i += 1) {
+          property.images[i].index = i;
         }
         console.log(data);
-        this.setState({ info: data });
+        this.setState({ info: property });
       },
     });
   }
 
   changeStatus() {
-    if (this.state.status === 'imageWindow') {
+    const { status } = this.state;
+    if (status === 'imageWindow') {
       this.setState({ status: 'galleryView' });
     } else {
       this.setState({ status: 'imageWindow' });
@@ -49,19 +51,20 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.status === 'imageWindow') {
-      return (
-        <div>
-          <ImageWindow info={this.state.info} />
-        </div>
-      );
-    } else if (this.state.status === 'galleryView') {
-      return (
-        <div>
-          <GalleryView />
-        </div>
-      );
+    const { status } = this.state;
+    let rendered;
+    const { info } = this.state;
+
+    if (status === 'imageWindow') {
+      rendered = <ImageWindow changeStatus={this.changeStatus} info={info} />;
+    } else if (status === 'galleryView') {
+      rendered = <GalleryView changeStatus={this.changeStatus} info={info} />;
     }
+    return (
+      <div>
+        {rendered}
+      </div>
+    );
   }
 }
 

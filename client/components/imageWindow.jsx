@@ -138,7 +138,7 @@ class ImageWindow extends React.Component {
             </span>
             <div>
               <ImageCard>
-                <Image src={this.props.info.images[this.state.index].imageUrl} alt="" />
+                <Image onClick={this.props.changeStatus} src={this.props.info.images[this.state.index].imageUrl} alt="" />
               </ImageCard>
             </div>
             <span>

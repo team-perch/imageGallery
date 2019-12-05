@@ -22,7 +22,7 @@ function Thumbnail(props) {
     width: 70px;
     height: 50px;
   `;
-  return(
+  return (
     <div>
       {props.images.map((image) => (
         <Vieport>
