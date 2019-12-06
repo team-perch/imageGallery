@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Thumbnail(props) {
-  const Vieport = styled.div`
+  const Viewport = styled.div`
     display: inline-block;
     vertical-align: middle;
   `;
@@ -18,18 +18,23 @@ function Thumbnail(props) {
     align-items: center;
   `;
   const ImageThumbnail = styled.img`
-  opacity: 1;
+    opacity: 0.5;
     width: 70px;
     height: 50px;
+    &:hover {
+      opacity: 1;
+      border: 1px solid #fff;
+    }
   `;
+  const { images, handleClick } = props;
   return (
     <div>
-      {props.images.map((image) => (
-        <Vieport>
+      {images.map((image) => (
+        <Viewport>
           <PhotoThumbnail>
-            <ImageThumbnail onClick={props.handleClick} src={image.imageUrl} alt={image.index} />
+            <ImageThumbnail onClick={handleClick} src={image.imageUrl} alt={image.index} />
           </PhotoThumbnail>
-        </Vieport>
+        </Viewport>
       ))}
     </div>
   );

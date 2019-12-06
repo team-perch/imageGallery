@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IoIosArrowBack } from 'react-icons/io';
-import { IoIosArrowForward } from 'react-icons/io';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { TiArrowMaximise } from 'react-icons/ti';
 import Thumbnail from './thumbnail.jsx';
 
 class ImageWindow extends React.Component {
@@ -28,16 +28,18 @@ class ImageWindow extends React.Component {
   }
 
   nextImage() {
+    const { info } = this.props;
     let { index } = this.state;
-    if (index < this.props.info.images.length - 1) {
+    if (index < info.images.length - 1) {
       index += 1;
       this.setState({ index });
     }
   }
 
   nextThumbnail() {
+    const { info } = this.props;
     let { start, end } = this.state;
-    if (end < this.props.info.images.length) {
+    if (end < info.images.length) {
       start += 8;
       end += 8;
       this.setState({ start, end });
@@ -69,7 +71,7 @@ class ImageWindow extends React.Component {
     `;
     const MediaBrowser = styled.div`
       position: relative:
-      width: 665px;
+      width: 666.6px;
     `;
     const PhotoArea = styled.div`
       position: relative;
@@ -80,7 +82,7 @@ class ImageWindow extends React.Component {
     const NavPrev = styled.div`
       color: #fff;
       transition: opacity .25s linear;
-      opacity: .9;
+      opacity: 0;
       height: 100%;
       width: 180px;
       position: absolute;
@@ -89,12 +91,15 @@ class ImageWindow extends React.Component {
       top: 0;
       vertical-align: baseline;
       display: block;
+      ${MediaBrowser}:hover & {
+        opacity: 1;
+      }
     `;
     const NavNext = styled.div`
       color: #fff
       right: 0;
       transition: opacity .25s linear;
-      opacity: .9;
+      opacity: 0;
       height: 100%;
       width: 180px;
       position: absolute;
@@ -103,6 +108,9 @@ class ImageWindow extends React.Component {
       top: 0;
       vertical-align: baseline;
       display: block;
+      ${MediaBrowser}:hover & {
+        opacity: 1;
+      }
     `;
     const ImageCard = styled.span`
       height: 441px;
@@ -158,10 +166,48 @@ class ImageWindow extends React.Component {
       overflow: hidden;
       cursor: pointer;
     `;
+    const PagerFade = styled.div`
+      opacity: 0.5;
+      ${PagerControl}:hover & {
+        opacity: 1;
+      }
+    `;
+    const Open = styled.div`
+      width: 38px;
+      height: 38px;
+      top: 10px;
+      right: 10px;
+      position: absolute;
+      z-index: 3;
+      vertical-align: baseline;
+      display: block;
+    `;
+    const Maximize = styled.div`
+      transition: opacity .25s linear;
+      opacity: 0
+      height: 24px;
+      width: 24px;
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      vertical-align: baseline;
+      display: block;
+      color: #fff;
+      ${MediaBrowser}:hover & {
+        opacity: 1;
+      }
+    `;
+    const { changeStatus, info } = this.props;
+    const { start, end, index } = this.state;
     return (
       <ImageWindowDiv>
         <MediaBrowser>
           <PhotoArea>
+            <Open>
+              <Maximize onClick={changeStatus}>
+                <TiArrowMaximise size={30} />
+              </Maximize>
+            </Open>
             <NavPrev onClick={this.previousImage}>
               <NavPrevLocation>
                 <IoIosArrowBack size={55} />
@@ -169,7 +215,7 @@ class ImageWindow extends React.Component {
             </NavPrev>
             <div>
               <ImageCard>
-                <Image onClick={this.props.changeStatus} src={this.props.info.images[this.state.index].imageUrl} alt="" />
+                <Image onClick={changeStatus} src={info.images[index].imageUrl} alt="" />
               </ImageCard>
             </div>
             <NavNext onClick={this.nextImage}>
@@ -180,21 +226,24 @@ class ImageWindow extends React.Component {
           </PhotoArea>
           <ThumbnailDrawer>
             <PagerControl>
-              <div onClick={this.previousThumbnail}>
-                <IoIosArrowBack size={20} opacity={0.5} />
-              </div>
+              <PagerFade onClick={this.previousThumbnail}>
+                <IoIosArrowBack size={20} />
+              </PagerFade>
             </PagerControl>
             <PagerViewPort>
               <span>
                 <ThumbnailContainer>
-                  <Thumbnail handleClick={this.handleClick} images={this.props.info.images.slice(this.state.start, this.state.end)} />
+                  <Thumbnail
+                    handleClick={this.handleClick}
+                    images={info.images.slice(start, end)}
+                  />
                 </ThumbnailContainer>
               </span>
             </PagerViewPort>
             <PagerControl>
-              <div onClick={this.nextThumbnail} type="button">
-                <IoIosArrowForward size={20} opacity={0.5} />
-              </div>
+              <PagerFade onClick={this.nextThumbnail} type="button">
+                <IoIosArrowForward size={20} />
+              </PagerFade>
             </PagerControl>
           </ThumbnailDrawer>
         </MediaBrowser>

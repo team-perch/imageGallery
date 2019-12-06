@@ -5,7 +5,9 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { IoIosArrowForward } from 'react-icons/io';
 
 function FullScreenView(props) {
-  const { info, fullScreen, index, nextImage, previousImage } = props;
+  const {
+    info, fullScreen, index, nextImage, previousImage
+  } = props;
   const FullScreenOverLay = styled.div`
     position: fixed;
     top: 0;
@@ -83,11 +85,20 @@ function FullScreenView(props) {
     vertical-align: baseline;
     display: block;
   `;
-  const NavLocation = styled.div`
+  const NavPrevLocation = styled.div`
     left: 36px;
     height: 44px;
     width: 44px;
-    position: relative;
+    position: absolute;
+    top: calc(50% - 18px);
+    overflow: hidden;
+    cursor: pointer;
+  `;
+  const NavNextLocation = styled.div`
+    right: 48px;
+    height: 44px;
+    width: 44px;
+    position: absolute;
     top: calc(50% - 18px);
     overflow: hidden;
     cursor: pointer;
@@ -129,9 +140,9 @@ function FullScreenView(props) {
         </CloseButton>
         <PhotoArea>
           <NavPrev onClick={previousImage}>
-            <NavLocation>
+            <NavPrevLocation>
               <IoIosArrowBack size={55} />
-            </NavLocation>
+            </NavPrevLocation>
           </NavPrev>
           <Stack>
             <Item>
@@ -141,9 +152,9 @@ function FullScreenView(props) {
             </Item>
           </Stack>
           <NavNext onClick={nextImage}>
-            <NavLocation>
+            <NavNextLocation>
               <IoIosArrowForward size={55} />
-            </NavLocation>
+            </NavNextLocation>
           </NavNext>
           <IndexBox>
             <span>

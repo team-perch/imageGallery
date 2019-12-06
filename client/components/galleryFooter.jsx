@@ -42,13 +42,13 @@ function GalleryFooter(props) {
     font-family: Libre Franklin;
     font-size: 16px;
   `;
-
+  const { info } = props;
   return (
     <DiaologFooter>
       <Footer>
         <BBInfo>
-          <BedInfo>{props.info.property.beds} Beds</BedInfo>
-          <BathInfo>{props.info.property.baths} Baths</BathInfo>
+          <BedInfo>{info.property.beds} Beds</BedInfo>
+          <BathInfo>{info.property.baths} Baths</BathInfo>
         </BBInfo>
       </Footer>
     </DiaologFooter>
