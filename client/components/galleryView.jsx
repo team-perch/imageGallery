@@ -5,6 +5,7 @@ import GalleryContent from './galleryContent.jsx';
 import GalleryFooter from './galleryFooter.jsx';
 
 function GalleryView(props) {
+  const { info, changeStatus, fullScreen } = props;
   const DialogContainer = styled.div`
     position: relative;
     height: auto;
@@ -18,9 +19,9 @@ function GalleryView(props) {
   `;
   return (
     <DialogContainer>
-      <GalleryHeader info={props.info} changeStatus={props.changeStatus} />
-      <GalleryContent images={props.info.images} />
-      <GalleryFooter info={props.info} />
+      <GalleryHeader info={info} changeStatus={changeStatus} />
+      <GalleryContent fullScreen={fullScreen} images={info.images} />
+      <GalleryFooter info={info} />
     </DialogContainer>
   );
 }

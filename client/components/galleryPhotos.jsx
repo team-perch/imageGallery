@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 function GalleryPhotos(props) {
+  const { image, fullScreen } = props;
   const Item = styled.div`
     position: relative;
     margin: 22px auto;
@@ -21,7 +22,7 @@ function GalleryPhotos(props) {
   return (
     <Item>
       <ImageCard>
-        <Image src={props.image.imageUrl} alt={props.image.index} />
+        <Image onClick={fullScreen} src={image.imageUrl} alt={image.index} />
       </ImageCard>
     </Item>
   );

@@ -3,6 +3,7 @@ import $ from 'jquery';
 // import styled from 'styled-components';
 import ImageWindow from './imageWindow.jsx';
 import GalleryView from './galleryView.jsx';
+import FullScreenView from './fullScreenView.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,10 +21,11 @@ class App extends React.Component {
     };
     this.getInfo = this.getInfo.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
+    this.fullScreen = this.fullScreen.bind(this);
   }
 
   componentDidMount() {
-    this.getInfo(5);
+    this.getInfo(8);
   }
 
   getInfo(siteId) {
@@ -50,6 +52,15 @@ class App extends React.Component {
     }
   }
 
+  fullScreen() {
+    const { status } = this.state;
+    if (status === 'galleryView') {
+      this.setState({ status: 'fullScreen' });
+    } else {
+      this.setState({ status: 'galleryView' });
+    }
+  }
+
   render() {
     const { status } = this.state;
     let rendered;
@@ -58,7 +69,9 @@ class App extends React.Component {
     if (status === 'imageWindow') {
       rendered = <ImageWindow changeStatus={this.changeStatus} info={info} />;
     } else if (status === 'galleryView') {
-      rendered = <GalleryView changeStatus={this.changeStatus} info={info} />;
+      rendered = <GalleryView fullScreen={this.fullScreen} changeStatus={this.changeStatus} info={info} />;
+    } else if (status === 'fullScreen') {
+      rendered = <FullScreenView fullScreen={this.fullScreen} info={info} />;
     }
     return (
       <div>

@@ -38,7 +38,7 @@ function GalleryFooter(props) {
   `;
   const BathInfo = styled.div`
     padding: 12px 11px 10px 10px;
-    boorder-spacing: 10px 7px;
+    border-spacing: 10px 7px;
     font-family: Libre Franklin;
     font-size: 16px;
   `;

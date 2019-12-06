@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import GalleryPhotos from './galleryPhotos.jsx';
 
 function GalleryContent(props) {
+  const { images, fullScreen } = props;
   const DialogContent = styled.div`
     position: relative;
     display: block;
@@ -43,12 +44,12 @@ function GalleryContent(props) {
           <PhotoList>
             <CenterRow>
               <PhotoColumn>
-                {props.images.slice(0, Math.floor(props.images.length / 2)).map((image) => (
-                  <GalleryPhotos image={image} />))}
+                {images.slice(0, Math.floor(images.length / 2)).map((image) => (
+                  <GalleryPhotos fullScreen={fullScreen} image={image} />))}
               </PhotoColumn>
               <PhotoColumn>
-                {props.images.slice(Math.floor(props.images.length / 2)).map((image) => (
-                  <GalleryPhotos image={image} />))}
+                {images.slice(Math.floor(images.length / 2)).map((image) => (
+                  <GalleryPhotos fullScreen={fullScreen} image={image} />))}
               </PhotoColumn>
             </CenterRow>
           </PhotoList>
