@@ -18,42 +18,46 @@ class ImageWindow extends React.Component {
   }
 
   previousImage() {
-    if (this.state.index !== 0) {
-      const index = this.state.index - 1;
+    let { index } = this.state;
+    if (index !== 0) {
+      index -= 1;
       this.setState({ index });
     }
   }
 
   nextImage() {
-    if (this.state.index < this.props.info.images.length - 1) {
-      const index = this.state.index + 1;
+    let { index } = this.state;
+    if (index < this.props.info.images.length - 1) {
+      index += 1;
       this.setState({ index });
     }
   }
 
   nextThumbnail() {
-    if (this.state.end < this.props.info.images.length) {
-      const start = this.state.start + 8;
-      const end = this.state.end + 8;
+    let { start, end } = this.state;
+    if (end < this.props.info.images.length) {
+      start += 8;
+      end += 8;
       this.setState({ start, end });
     }
   }
 
   previousThumbnail() {
-    if (this.state.start !== 0) {
-      const start = this.state.start - 8;
-      const end = this.state.end - 8;
+    let { start, end } = this.state;
+    if (start !== 0) {
+      start -= 8;
+      end -= 8;
       this.setState({ start, end });
     }
   }
 
   handleClick(e) {
-    const index = parseInt(e.target.alt);
+    const index = parseInt(e.target.alt, 10);
     this.setState({ index });
   }
 
   render() {
-    const ImageWindow = styled.div`
+    const ImageWindowDiv = styled.div`
       width: 66.6%;
       max-width: 666.6px;
       min-width: 600px;
@@ -128,7 +132,7 @@ class ImageWindow extends React.Component {
       vertical-align: middle;
     `;
     return (
-      <ImageWindow>
+      <ImageWindowDiv>
         <MediaBrowser>
           <PhotoArea>
             <span>
@@ -167,7 +171,7 @@ class ImageWindow extends React.Component {
             </PagerControl>
           </ThumbnailDrawer>
         </MediaBrowser>
-      </ImageWindow>
+      </ImageWindowDiv>
     );
   }
 }

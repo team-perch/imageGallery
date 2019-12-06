@@ -24,6 +24,7 @@
     "mysql2": "^2.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-icons": "^3.8.0",
     "sequelize": "^5.21.2",
     "styled-components": "^4.4.1",
     "xml-js": "^1.6.11"

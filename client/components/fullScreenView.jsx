@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IoMdClose } from 'react-icons/io';
 
 function FullScreenView(props) {
-  const { info, fullScreen } = props;
+  const { info, fullScreen, index } = props;
+  console.log(info)
   const FullScreenOverLay = styled.div`
     position: fixed;
     top: 0;
@@ -27,16 +29,65 @@ function FullScreenView(props) {
     fill: #fff;
     overflow: hidden;
   `;
+  const PhotoArea = styled.div`
+    background-color: #000;
+    margin-top: 50px;
+    height: calc(100vh - 170px);
+    position: relative;
+    width: 100%;
+    display: block;
+  `;
+  const Stack = styled.div`
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    display: block;
+  `;
+  const Item = styled.span`
+    opacity: 1;
+    position: absolute;
+    transition: opacity .2s ease-out 0s;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
+  const ImageCard = styled.div`
+    background-color: #000;
+    height: auto;
+    text-align: center;
+    position: relative;
+    display: block;
+  `;
+  const Image = styled.img`
+    max-height: calc(100vh -170px);
+    max-width: 100%;
+    text-align: center;
+  `;
+
   return (
     <FullScreenOverLay>
       <FSPhotoSlider>
         <CloseButton onClick={fullScreen}>
           <svg viewBox="0 0 24 24">
-            <g gillRule="evenodd">
-              <path d="M 21.105 4.134 l -1.061 -1.061 a 0.252 0.252 0 0 0 -0.354 0 l -7.601 7.602 l -7.602 -7.602 a 0.25 0.25 0 0 0 -0.353 0 l -1.061 1.06 a 0.252 0.252 0 0 0 0 0.355 l 7.602 7.6 l -7.602 7.603 a 0.25 0.25 0 0 0 0 0.353 l 1.06 1.06 a 0.25 0.25 0 0 0 0.354 0 l 7.602 -7.601 l 7.6 7.602 a 0.252 0.252 0 0 0 0.355 0 l 1.06 -1.061 a 0.25 0.25 0 0 0 0 -0.353 l -7.601 -7.602 l 7.602 -7.601 a 0.252 0.252 0 0 0 0 -0.354"/>
+            <g fillRule="evenodd">
+              <IoMdClose size={30} />
             </g>
           </svg>
         </CloseButton>
+        <PhotoArea>
+          <Stack>
+            <Item>
+              <ImageCard>
+                <Image src={info.images[index].imageUrl} alt={info.images[index].index} />
+              </ImageCard>
+            </Item>
+          </Stack>
+        </PhotoArea>
       </FSPhotoSlider>
     </FullScreenOverLay>
   );

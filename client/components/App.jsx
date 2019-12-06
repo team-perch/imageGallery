@@ -18,6 +18,7 @@ class App extends React.Component {
         },
         images: [{ imageUrl: '' }],
       },
+      index: 0,
     };
     this.getInfo = this.getInfo.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
@@ -52,7 +53,9 @@ class App extends React.Component {
     }
   }
 
-  fullScreen() {
+  fullScreen(e) {
+    const index = parseInt(e.target.alt, 10);
+    this.setState({ index });
     const { status } = this.state;
     if (status === 'galleryView') {
       this.setState({ status: 'fullScreen' });
@@ -62,16 +65,15 @@ class App extends React.Component {
   }
 
   render() {
-    const { status } = this.state;
+    const { status, info, index } = this.state;
     let rendered;
-    const { info } = this.state;
 
     if (status === 'imageWindow') {
       rendered = <ImageWindow changeStatus={this.changeStatus} info={info} />;
     } else if (status === 'galleryView') {
       rendered = <GalleryView fullScreen={this.fullScreen} changeStatus={this.changeStatus} info={info} />;
     } else if (status === 'fullScreen') {
-      rendered = <FullScreenView fullScreen={this.fullScreen} info={info} />;
+      rendered = <FullScreenView index={index} fullScreen={this.fullScreen} info={info} />;
     }
     return (
       <div>
