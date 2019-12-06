@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IoMdClose } from 'react-icons/io';
+import { IoIosArrowBack } from 'react-icons/io';
+import { IoIosArrowForward } from 'react-icons/io';
 
 function FullScreenView(props) {
-  const { info, fullScreen, index } = props;
-  console.log(info)
+  const { info, fullScreen, index, nextImage, previousImage } = props;
   const FullScreenOverLay = styled.div`
     position: fixed;
     top: 0;
@@ -13,13 +14,15 @@ function FullScreenView(props) {
     background-color: #000;
     z-index: 10022;
     margin-top: 0;
+    vertical-align: baseline;
     display: block;
   `;
   const FSPhotoSlider = styled.div`
+    vertical-align: baseline;
     display: block;
-    color: white;
   `;
   const CloseButton = styled.svg`
+    color: white;
     top: 27px;
     position: absolute;
     right: 36px;
@@ -34,7 +37,8 @@ function FullScreenView(props) {
     margin-top: 50px;
     height: calc(100vh - 170px);
     position: relative;
-    width: 100%;
+    max-width: 100%;
+    vertical-align: baseline;
     display: block;
   `;
   const Stack = styled.div`
@@ -65,8 +69,40 @@ function FullScreenView(props) {
   `;
   const Image = styled.img`
     max-height: calc(100vh -170px);
-    max-width: 100%;
+    max-width: 86%;
     text-align: center;
+  `;
+  const NavPrev = styled.div`
+    color: white;
+    height: 100%;
+    width: 180px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 2;
+    top: 0;
+    vertical-align: baseline;
+    display: block;
+  `;
+  const NavLocation = styled.div`
+    left: 36px;
+    height: 44px;
+    width: 44px;
+    position: relative;
+    top: calc(50% - 18px);
+    overflow: hidden;
+    cursor: pointer;
+  `;
+  const NavNext = styled.div`
+    color: white;
+    right: 0;
+    height: 100%;
+    width: 180px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 2;
+    top: 0;
+    vertical-align: baseline;
+    display: block;
   `;
 
   return (
@@ -80,6 +116,11 @@ function FullScreenView(props) {
           </svg>
         </CloseButton>
         <PhotoArea>
+          <NavPrev onClick={previousImage}>
+            <NavLocation>
+              <IoIosArrowBack size={55} />
+            </NavLocation>
+          </NavPrev>
           <Stack>
             <Item>
               <ImageCard>
@@ -87,6 +128,11 @@ function FullScreenView(props) {
               </ImageCard>
             </Item>
           </Stack>
+          <NavNext onClick={nextImage}>
+            <NavLocation>
+              <IoIosArrowForward size={45} />
+            </NavLocation>
+          </NavNext>
         </PhotoArea>
       </FSPhotoSlider>
     </FullScreenOverLay>

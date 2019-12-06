@@ -23,6 +23,8 @@ class App extends React.Component {
     this.getInfo = this.getInfo.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
     this.fullScreen = this.fullScreen.bind(this);
+    this.nextImage = this.nextImage.bind(this);
+    this.previousImage = this.previousImage.bind(this);
   }
 
   componentDidMount() {
@@ -64,6 +66,23 @@ class App extends React.Component {
     }
   }
 
+  previousImage() {
+    let { index } = this.state;
+    if (index !== 0) {
+      index -= 1;
+      this.setState({ index });
+    }
+  }
+
+  nextImage() {
+    const { info } = this.state;
+    let { index } = this.state;
+    if (index < info.images.length - 1) {
+      index += 1;
+      this.setState({ index });
+    }
+  }
+
   render() {
     const { status, info, index } = this.state;
     let rendered;
@@ -73,7 +92,7 @@ class App extends React.Component {
     } else if (status === 'galleryView') {
       rendered = <GalleryView fullScreen={this.fullScreen} changeStatus={this.changeStatus} info={info} />;
     } else if (status === 'fullScreen') {
-      rendered = <FullScreenView index={index} fullScreen={this.fullScreen} info={info} />;
+      rendered = <FullScreenView previousImage={this.previousImage} nextImage={this.nextImage} index={index} fullScreen={this.fullScreen} info={info} />;
     }
     return (
       <div>
