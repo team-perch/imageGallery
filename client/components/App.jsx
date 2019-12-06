@@ -28,7 +28,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getInfo(8);
+    this.getInfo(12);
   }
 
   getInfo(siteId) {

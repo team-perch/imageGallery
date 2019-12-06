@@ -22,7 +22,7 @@ function FullScreenView(props) {
     display: block;
   `;
   const CloseButton = styled.svg`
-    color: white;
+    color: #fff;
     top: 27px;
     position: absolute;
     right: 36px;
@@ -69,11 +69,11 @@ function FullScreenView(props) {
   `;
   const Image = styled.img`
     max-height: calc(100vh -170px);
-    max-width: 86%;
+    max-width: 76%;
     text-align: center;
   `;
   const NavPrev = styled.div`
-    color: white;
+    color: #fff;
     height: 100%;
     width: 180px;
     position: absolute;
@@ -93,7 +93,7 @@ function FullScreenView(props) {
     cursor: pointer;
   `;
   const NavNext = styled.div`
-    color: white;
+    color: #fff;
     right: 0;
     height: 100%;
     width: 180px;
@@ -103,6 +103,18 @@ function FullScreenView(props) {
     top: 0;
     vertical-align: baseline;
     display: block;
+  `;
+  const IndexBox = styled.div`
+    bottom: -42px;
+    right: 48%;
+    padding 5px 12px;
+    position: absolute;
+    color: #fff;
+    background-color: rgba(0,0,0,.7);
+    z-index: 5;
+    cursor: default;
+    font-size: 0.75rem;
+    font-family: Libre Franklin;
   `;
 
   return (
@@ -130,9 +142,14 @@ function FullScreenView(props) {
           </Stack>
           <NavNext onClick={nextImage}>
             <NavLocation>
-              <IoIosArrowForward size={45} />
+              <IoIosArrowForward size={55} />
             </NavLocation>
           </NavNext>
+          <IndexBox>
+            <span>
+              {index + 1} of {info.images.length}
+            </span>
+          </IndexBox>
         </PhotoArea>
       </FSPhotoSlider>
     </FullScreenOverLay>

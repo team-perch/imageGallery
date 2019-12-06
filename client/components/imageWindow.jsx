@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IoIosArrowBack } from 'react-icons/io';
+import { IoIosArrowForward } from 'react-icons/io';
 import Thumbnail from './thumbnail.jsx';
 
 class ImageWindow extends React.Component {
@@ -75,26 +77,32 @@ class ImageWindow extends React.Component {
       width: 100%;
       background: #333;
     `;
-    const NavPrev = styled.button`
+    const NavPrev = styled.div`
+      color: #fff;
       transition: opacity .25s linear;
-      opacity: 0;
+      opacity: .9;
       height: 100%;
       width: 180px;
       position: absolute;
       cursor: pointer;
       z-index: 2;
       top: 0;
+      vertical-align: baseline;
+      display: block;
     `;
     const NavNext = styled.div`
+      color: #fff
       right: 0;
       transition: opacity .25s linear;
-      opacity: 0;
+      opacity: .9;
       height: 100%;
       width: 180px;
       position: absolute;
       cursor: pointer;
       z-index: 2;
       top: 0;
+      vertical-align: baseline;
+      display: block;
     `;
     const ImageCard = styled.span`
       height: 441px;
@@ -130,31 +138,50 @@ class ImageWindow extends React.Component {
       display: table-cell;
       text-align: center;
       vertical-align: middle;
+      color: #fff;
+    `;
+    const NavPrevLocation = styled.div`
+      left: 10px;
+      height: 44px;
+      width: 44px;
+      position: absolute;
+      top: calc(50% - 18px);
+      overflow: hidden;
+      cursor: pointer;
+    `;
+    const NavNextLocation = styled.div`
+      right: 25px;
+      height: 44px;
+      width: 44px;
+      position: absolute;
+      top: calc(50% - 18px);
+      overflow: hidden;
+      cursor: pointer;
     `;
     return (
       <ImageWindowDiv>
         <MediaBrowser>
           <PhotoArea>
-            <span>
-              <NavPrev onClick={this.previousImage} type="button">
-                {'<'}
-              </NavPrev>
-            </span>
+            <NavPrev onClick={this.previousImage}>
+              <NavPrevLocation>
+                <IoIosArrowBack size={55} />
+              </NavPrevLocation>
+            </NavPrev>
             <div>
               <ImageCard>
                 <Image onClick={this.props.changeStatus} src={this.props.info.images[this.state.index].imageUrl} alt="" />
               </ImageCard>
             </div>
-            <span>
-              <NavNext onClick={this.nextImage} type="button">
-                {'>'}
-              </NavNext>
-            </span>
+            <NavNext onClick={this.nextImage}>
+              <NavNextLocation>
+                <IoIosArrowForward size={55} />
+              </NavNextLocation>
+            </NavNext>
           </PhotoArea>
           <ThumbnailDrawer>
             <PagerControl>
-              <div onClick={this.previousThumbnail} type="button">
-                {'<'}
+              <div onClick={this.previousThumbnail}>
+                <IoIosArrowBack size={20} opacity={0.5} />
               </div>
             </PagerControl>
             <PagerViewPort>
@@ -166,7 +193,7 @@ class ImageWindow extends React.Component {
             </PagerViewPort>
             <PagerControl>
               <div onClick={this.nextThumbnail} type="button">
-                {'>'}
+                <IoIosArrowForward size={20} opacity={0.5} />
               </div>
             </PagerControl>
           </ThumbnailDrawer>
