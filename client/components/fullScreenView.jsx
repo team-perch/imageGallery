@@ -1,12 +1,11 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import styled from 'styled-components';
-import { IoMdClose } from 'react-icons/io';
-import { IoIosArrowBack } from 'react-icons/io';
-import { IoIosArrowForward } from 'react-icons/io';
+import { IoMdClose, IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 function FullScreenView(props) {
   const {
-    info, fullScreen, index, nextImage, previousImage
+    info, fullScreen, index, nextImage, previousImage,
   } = props;
   const FullScreenOverLay = styled.div`
     position: fixed;

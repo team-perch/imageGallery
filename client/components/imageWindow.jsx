@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
