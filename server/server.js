@@ -3,7 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 // eslint-disable-next-line no-unused-vars
 const Sequelize = require('sequelize');
-const { Property, Image } = require('./../database/seed.js');
+const { Property, Image } = require('./../database/model.js');
 
 const app = express();
 
