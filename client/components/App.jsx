@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
+/* eslint-disable import/extensions */
 import React from 'react';
 import $ from 'jquery';
-// import styled from 'styled-components';
 import ImageWindow from './imageWindow.jsx';
 import GalleryView from './galleryView.jsx';
 import FullScreenView from './fullScreenView.jsx';
@@ -40,7 +41,6 @@ class App extends React.Component {
         for (let i = 0; i < data.images.length; i += 1) {
           property.images[i].index = i;
         }
-        console.log(data);
         this.setState({ info: property });
       },
     });
