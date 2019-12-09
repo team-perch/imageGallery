@@ -1,10 +1,23 @@
+/* eslint-disable no-console */
 const Sequelize = require('sequelize');
 const faker = require('faker');
 const axios = require('axios');
 const convert = require('xml-js');
 const credentials = require('./../authentication.js');
 
-const sequelize = new Sequelize(
+let sequelize = new Sequelize(
+  '',
+  'root',
+  credentials.dbpw,
+  {
+    host: 'localhost',
+    dialect: 'mysql',
+  },
+);
+
+sequelize.query('CREATE DATABASE if not exists photoGallery;');
+
+sequelize = new Sequelize(
   'photoGallery',
   'root',
   credentials.dbpw,
@@ -17,11 +30,9 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    // eslint-disable-next-line no-console
     console.log('Connection has been established successfully');
   })
   .catch((err) => {
-    // eslint-disable-next-line no-console
     console.error('Unable to connect to the database: ', err);
   });
 
