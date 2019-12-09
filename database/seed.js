@@ -1,73 +1,8 @@
 /* eslint-disable no-console */
-const Sequelize = require('sequelize');
 const faker = require('faker');
 const axios = require('axios');
 const convert = require('xml-js');
-const credentials = require('./../authentication.js');
-
-let sequelize = new Sequelize(
-  '',
-  'root',
-  credentials.dbpw,
-  {
-    host: 'localhost',
-    dialect: 'mysql',
-  },
-);
-
-sequelize.query('CREATE DATABASE if not exists photoGallery;');
-
-sequelize = new Sequelize(
-  'photoGallery',
-  'root',
-  credentials.dbpw,
-  {
-    host: 'localhost',
-    dialect: 'mysql',
-  },
-);
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully');
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database: ', err);
-  });
-
-const Property = sequelize.define('property', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false,
-  },
-  address: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  beds: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
-  baths: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
-});
-
-const Image = sequelize.define('image', {
-  propId: {
-    type: Sequelize.INTEGER,
-    foreignKey: true,
-    allowNull: false,
-  },
-  imageUrl: {
-    type: Sequelize.STRING(1234),
-    allowNull: false,
-  },
-});
+const { Property, Image } = require('./model.js');
 
 const seedProperties = () => {
   for (let i = 0; i < 100; i += 1) {
@@ -109,10 +44,5 @@ const seedImages = () => {
     .catch((error) => console.log(error));
 };
 
-// seedProperties();
-// seedImages();
-
-module.exports = {
-  Property,
-  Image,
-};
+seedProperties();
+seedImages();
