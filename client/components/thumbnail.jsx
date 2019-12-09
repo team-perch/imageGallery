@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Thumbnail(props) {
+  const { images, handleClick } = props;
   const Viewport = styled.div`
     display: inline-block;
     vertical-align: middle;
@@ -26,7 +27,6 @@ function Thumbnail(props) {
       border: 1px solid #fff;
     }
   `;
-  const { images, handleClick } = props;
   return (
     <div>
       {images.map((image) => (
