@@ -87,7 +87,7 @@ const seedImages = () => {
         const numPhotos = Math.floor(Math.random() * (35 - 20)) + 20;
         const propId = i;
         for (let h = 0; h < numPhotos; h += 1) {
-          const imageUrl = `https://hrsf-fec-photogallery.s3-us-west-1.amazonaws.com/${key[Math.floor(Math.random() * 126)]}`;
+          const imageUrl = `https://hrsf-fec-photogallery.s3-us-west-1.amazonaws.com/${key[Math.floor(Math.random() * 120)]}`;
           Image.sync({ force: true }).then(() => Image.create({
             propId,
             imageUrl,
