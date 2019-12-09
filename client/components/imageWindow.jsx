@@ -63,6 +63,7 @@ class ImageWindow extends React.Component {
 
   render() {
     const ImageWindowDiv = styled.div`
+      margin-left: 10%;
       width: 66.6%;
       max-width: 666.6px;
       min-width: 600px;

@@ -3,4 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App.jsx';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+const id = (new URL(window.location)).searchParams.get('id');
+
+ReactDOM.render(<App id={id} />, document.getElementById('app'));

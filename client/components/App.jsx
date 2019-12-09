@@ -29,7 +29,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getInfo(12);
+    const { id } = this.props;
+    this.getInfo(id);
   }
 
   getInfo(siteId) {
