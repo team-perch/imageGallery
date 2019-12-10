@@ -29,8 +29,9 @@ function Thumbnail(props) {
   `;
   return (
     <div>
-      {images.map((image) => (
-        <Viewport>
+      {images.map((image, key) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Viewport key={key}>
           <PhotoThumbnail>
             <ImageThumbnail onClick={handleClick} src={image.imageUrl} alt={image.index} />
           </PhotoThumbnail>
