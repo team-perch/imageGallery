@@ -10,6 +10,7 @@
     "build-dev": "webpack -d -w",
     "build": "webpack --mode='production'",
     "server-dev": "nodemon server/start.js",
+    "start": "node server/start.js",
     "seed-db": "node database/seed.js",
     "test": "jest"
   },

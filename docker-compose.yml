@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  imagegallery:
+    build: ./
+    depends_on:
+      - 'database'
+    ports:
+      - 3003:3003
+    command: bash -c "./wait-for-it.sh database:3306 && npm run seed-db && npm start"
+
+
+  database:
+    image: mysql:5.7
+    restart: always
+    environment:
+        MYSQL_ROOT_USER: 'root'
+        MYSQL_ROOT_PASSWORD: 'Poncione8!9'
+        MYSQL_DATABASE: 'photoGallery'
+        MYSQL_USER: 'photos'
+        MYSQL_PASSWORD: 'photos'
+    ports: [3306:3306]

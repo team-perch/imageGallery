@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import React from 'react';
+import ReactDom from 'react-dom';
 import styled from 'styled-components';
 import GalleryHeader from './galleryHeader.jsx';
 import GalleryContent from './galleryContent.jsx';
@@ -18,12 +19,13 @@ function GalleryView(props) {
     flex-direction: column;
     width: 100%;
   `;
-  return (
+  return ReactDom.createPortal(
     <DialogContainer>
       <GalleryHeader info={info} changeStatus={changeStatus} />
       <GalleryContent fullScreen={fullScreen} images={info.images} />
       <GalleryFooter info={info} />
-    </DialogContainer>
+    </DialogContainer>,
+    document.getElementById('modal'),
   );
 }
 
