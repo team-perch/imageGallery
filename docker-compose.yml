@@ -15,7 +15,6 @@ services:
     restart: always
     environment:
         MYSQL_ROOT_USER: 'root'
-        MYSQL_ROOT_PASSWORD: 'Poncione8!9'
         MYSQL_DATABASE: 'photoGallery'
         MYSQL_USER: 'photos'
         MYSQL_PASSWORD: 'photos'
