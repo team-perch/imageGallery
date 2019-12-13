@@ -5,7 +5,7 @@ let sequelize = new Sequelize(
   'photos',
   'photos',
   {
-    host: 'localhost',
+    host: 'database',
     dialect: 'mysql',
   },
 );
@@ -17,7 +17,7 @@ sequelize = new Sequelize(
   'photos',
   'photos',
   {
-    host: 'localhost',
+    host: 'database',
     dialect: 'mysql',
   },
 );
