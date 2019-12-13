@@ -6,6 +6,8 @@ import ImageWindow from './imageWindow.jsx';
 import GalleryView from './galleryView.jsx';
 import FullScreenView from './fullScreenView.jsx';
 
+const url = 'http://13.56.43.120';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +38,7 @@ class App extends React.Component {
   getInfo(siteId) {
     $.ajax({
       type: 'GET',
-      url: `http://localhost:3003/api/images/${siteId}`,
+      url: `${url}/api/images/${siteId}`,
       success: (data) => {
         const property = data;
         for (let i = 0; i < data.images.length; i += 1) {
