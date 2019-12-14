@@ -21,13 +21,21 @@ class App extends React.Component {
         },
         images: [{ imageUrl: '' }],
       },
-      index: 0,
+      indexMain: 0,
+      indexFull: 0,
+      start: 0,
+      end: 8,
     };
     this.getInfo = this.getInfo.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
     this.fullScreen = this.fullScreen.bind(this);
-    this.nextImage = this.nextImage.bind(this);
+    this.nextImageFull = this.nextImageFull.bind(this);
+    this.previousImageFull = this.previousImageFull.bind(this);
     this.previousImage = this.previousImage.bind(this);
+    this.nextImage = this.nextImage.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.nextThumbnail = this.nextThumbnail.bind(this);
+    this.previousThumbnail = this.previousThumbnail.bind(this);
   }
 
   componentDidMount() {
@@ -59,8 +67,8 @@ class App extends React.Component {
   }
 
   fullScreen(e) {
-    const index = parseInt(e.target.alt, 10);
-    this.setState({ index });
+    const indexFull = parseInt(e.target.alt, 10);
+    this.setState({ indexFull });
     const { status } = this.state;
     if (status === 'galleryView') {
       this.setState({ status: 'fullScreen' });
@@ -69,33 +77,76 @@ class App extends React.Component {
     }
   }
 
+  previousImageFull() {
+    let { indexFull } = this.state;
+    if (indexFull !== 0) {
+      indexFull -= 1;
+      this.setState({ indexFull });
+    }
+  }
+
+  nextImageFull() {
+    const { info } = this.state;
+    let { indexFull } = this.state;
+    if (indexFull < info.images.length - 1) {
+      indexFull += 1;
+      this.setState({ indexFull });
+    }
+  }
+
   previousImage() {
-    let { index } = this.state;
-    if (index !== 0) {
-      index -= 1;
-      this.setState({ index });
+    let { indexMain } = this.state;
+    if (indexMain !== 0) {
+      indexMain -= 1;
+      this.setState({ indexMain });
     }
   }
 
   nextImage() {
     const { info } = this.state;
-    let { index } = this.state;
-    if (index < info.images.length - 1) {
-      index += 1;
-      this.setState({ index });
+    let { indexMain } = this.state;
+    if (indexMain < info.images.length - 1) {
+      indexMain += 1;
+      this.setState({ indexMain });
     }
   }
 
+  nextThumbnail() {
+    const { info } = this.state;
+    let { start, end } = this.state;
+    if (end < info.images.length) {
+      start += 8;
+      end += 8;
+      this.setState({ start, end });
+    }
+  }
+
+  previousThumbnail() {
+    let { start, end } = this.state;
+    if (start !== 0) {
+      start -= 8;
+      end -= 8;
+      this.setState({ start, end });
+    }
+  }
+
+  handleClick(e) {
+    const indexMain = parseInt(e.target.alt, 10);
+    this.setState({ indexMain });
+  }
+
   render() {
-    const { status, info, index } = this.state;
+    const {
+      status, info, indexFull, indexMain, start, end,
+    } = this.state;
     let rendered;
 
     if (status === 'imageWindow') {
-      rendered = <ImageWindow changeStatus={this.changeStatus} info={info} />;
+      rendered = <ImageWindow nextThumbnail={this.nextThumbnail} previousThumbnail={this.previousThumbnail} handleClick={this.handleClick} previousImage={this.previousImage} nextImage={this.nextImage} start={start} end={end} index={indexMain} changeStatus={this.changeStatus} info={info} />;
     } else if (status === 'galleryView') {
       rendered = <GalleryView fullScreen={this.fullScreen} changeStatus={this.changeStatus} info={info} />;
     } else if (status === 'fullScreen') {
-      rendered = <FullScreenView previousImage={this.previousImage} nextImage={this.nextImage} index={index} fullScreen={this.fullScreen} info={info} />;
+      rendered = <FullScreenView previousImage={this.previousImageFull} nextImage={this.nextImageFull} index={indexFull} fullScreen={this.fullScreen} info={info} />;
     }
     return (
       <div>

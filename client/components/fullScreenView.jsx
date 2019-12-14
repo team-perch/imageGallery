@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
+import ReactDom from 'react-dom';
 import styled from 'styled-components';
 import { IoMdClose, IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
@@ -127,7 +128,7 @@ function FullScreenView(props) {
     font-family: Libre Franklin;
   `;
 
-  return (
+  return ReactDom.createPortal(
     <FullScreenOverLay>
       <FSPhotoSlider>
         <CloseButton onClick={fullScreen}>
@@ -162,7 +163,8 @@ function FullScreenView(props) {
           </IndexBox>
         </PhotoArea>
       </FSPhotoSlider>
-    </FullScreenOverLay>
+    </FullScreenOverLay>,
+    document.getElementById('modal'),
   );
 }
 
