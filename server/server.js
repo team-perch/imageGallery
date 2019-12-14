@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const compression = require('compression');
 // eslint-disable-next-line no-unused-vars
 const Sequelize = require('sequelize');
 const { Property, Image } = require('./../database/model.js');
@@ -9,6 +10,7 @@ const { Property, Image } = require('./../database/model.js');
 const app = express();
 
 app.use(cors());
+app.use(compression());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
