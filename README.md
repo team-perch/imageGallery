@@ -21,17 +21,17 @@ Image Gallery component of Perch, real estate listing app
 
 - POST /api/images/:propertyId
 
-> Add an image to an existing property listing
+> Add an image to an existing property listing\
 > Returns the new image entry object
 
 - GET /api/images/:propertyId
 
-> Get all images from an existing property listing
+> Get all images from an existing property listing\
 > Returns an array of image objects matching the propertyId of the property listing
 
 - PUT /api/images/:propertyId/:imageId
 
-> Update a specified image from an existing property listing with new data
+> Update a specified image from an existing property listing with new data\
 > Returns the updated image entry object
 
 - DELETE /api/images/:propertyId/:imageId
