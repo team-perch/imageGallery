@@ -1,13 +1,13 @@
-# Project Name
+# Perch - Image Gallery
 
-> Project description
+Image Gallery component of Perch, real estate listing app
 
 ## Related Projects
 
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+  - https://github.com/team-perch/costHomeOwnership
+  - https://github.com/team-perch/cost-home-ownership
+  - https://github.com/team-perch/graph
+  - https://github.com/team-perch/Laurence-proxy
 
 ## Table of Contents
 
@@ -17,7 +17,27 @@
 
 ## Usage
 
-> Some usage instructions
+### API endpoints:
+
+- POST /api/images/:propertyId
+
+> Add an image to an existing property listing
+> Returns the new image entry object
+
+- GET /api/images/:propertyId
+
+> Get all images from an existing property listing
+> Returns an array of image objects matching the propertyId of the property listing
+
+- PUT /api/images/:propertyId/:imageId
+
+> Update a specified image from an existing property listing with new data
+> Returns the updated image entry object
+
+- DELETE /api/images/:propertyId/:imageId
+
+> Delete a specified image from an existing property listing
+
 
 ## Requirements
 

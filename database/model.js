@@ -53,6 +53,12 @@ const Property = sequelize.define('property', {
 });
 
 const Image = sequelize.define('image', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
   propId: {
     type: Sequelize.INTEGER,
     foreignKey: true,
@@ -60,6 +66,10 @@ const Image = sequelize.define('image', {
   },
   imageUrl: {
     type: Sequelize.STRING(1234),
+    allowNull: false,
+  },
+  roomTag: {
+    type: Sequelize.STRING,
     allowNull: false,
   },
 });
