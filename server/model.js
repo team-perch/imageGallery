@@ -3,6 +3,8 @@ const useMongo = require('../database/mongoDB.js');
 const useSequelize = require('../database/model.js');
 
 
+const Properties = useMongo.collection('Properties');
+
 module.exports = {
   insertImage: (propertyId, imageInfo) => {
     if (process.env.DB === 'Postgres') {
@@ -20,7 +22,9 @@ module.exports = {
     }
 
     if (process.env.DB === 'Mongo') {
-      return useMongo.query();
+      return Properties.update({
+
+      });
     }
 
     const entry = imageInfo;
@@ -36,7 +40,7 @@ module.exports = {
     }
 
     if (process.env.DB === 'Mongo') {
-      return useMongo.query();
+      return Properties.query();
     }
 
     return useSequelize.Property.findOne({
@@ -52,7 +56,7 @@ module.exports = {
     }
 
     if (process.env.DB === 'Mongo') {
-      return useMongo.query();
+      return Properties.query();
     }
 
     return useSequelize.Image.findAll({
@@ -73,7 +77,7 @@ module.exports = {
     }
 
     if (process.env.DB === 'Mongo') {
-      return useMongo.query();
+      return Properties.query();
     }
 
     return useSequelize.Image.update(newInfo, { where: { id: imageId } });
@@ -86,7 +90,7 @@ module.exports = {
     }
 
     if (process.env.DB === 'Mongo') {
-      return useMongo.query();
+      return Properties.query();
     }
 
     return useSequelize.Image.destroy({ where: { id: imageId } });
