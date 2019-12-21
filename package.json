@@ -11,6 +11,8 @@
     "build": "webpack --mode='production'",
     "server-dev": "nodemon server/start.js",
     "start": "node server/start.js",
+    "pg-schema": "psql -d postgres -a -f ./database/schema.sql",
+    "seed-postgres": "DB=Postgres node database/seeding.js",
     "seed-db": "node database/seed.js",
     "test": "jest"
   },
