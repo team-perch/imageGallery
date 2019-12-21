@@ -2,10 +2,12 @@
 const faker = require('faker');
 const axios = require('axios');
 const convert = require('xml-js');
+const path = require('path');
+const fs = require('fs');
 const usePostgres = require('./postgresDB.js');
 
 
-const primaryRecords = 50000;
+const primaryRecords = 5;
 
 
 const getKeys = async (room) => {
@@ -79,21 +81,34 @@ const chooseImage = async (room) => {
 };
 
 
+const ownerColumns = ['username', 'firstName', 'lastName', 'email', 'phone'];
+
+const propertyColumns = ['ownerId', 'address', 'active', 'listingPrice', 'sqft', 'beds', 'baths', 'listingDate'];
+
+const imageColumns = ['propId', 'imageUrl', 'roomTag', 'description', 'views', 'dimensions', 'createdAt', 'fileFormat'];
+
+
 const seedPostgres = async () => {
   const start = Date.now();
+
+  const ownerStream = fs.createWriteStream(path.join(__dirname, './output/owner.csv'), { flags: 'w' });
+  ownerStream.write(ownerColumns.join(','));
+  const propertyStream = fs.createWriteStream(path.join(__dirname, './output/property.csv'), { flags: 'w' });
+  propertyStream.write(propertyColumns.join(','));
+  const imageStream = fs.createWriteStream(path.join(__dirname, './output/image.csv'), { flags: 'w' });
+  imageStream.write(imageColumns.join(','));
+
 
   let count = 0;
   for (let i = 1; count <= primaryRecords; i += 1) {
     const owner = createOwner();
-    const ownerColumns = [];
     const ownerValues = [];
 
-    Object.keys(owner).forEach((key) => {
-      ownerColumns.push(`"${key}"`);
-      ownerValues.push(`$$${owner[key]}$$`);
+    ownerColumns.forEach((column) => {
+      ownerValues.push(owner[column]);
     });
 
-    await usePostgres.query(`INSERT INTO "Owner"(${ownerColumns.join(',')}) VALUES(${ownerValues.join(',')});`);
+    ownerStream.write(`\n${ownerValues.join(',')}`);
 
     const homesOwned = Math.ceil(
       faker.random.number({ min: 1, max: 50 }) / faker.random.number({ min: 1, max: 50 }),
@@ -104,18 +119,14 @@ const seedPostgres = async () => {
     for (let j = 0; j < homesOwned; j += 1) {
       const property = createProperty();
       property.ownerId = i;
-      const propertyColumns = [];
       const propertyValues = [];
 
-      Object.keys(property).forEach((key) => {
-        propertyColumns.push(`"${key}"`);
-        propertyValues.push(`$$${property[key]}$$`);
+      propertyColumns.forEach((column) => {
+        propertyValues.push(property[column]);
       });
 
-      await usePostgres.query(`INSERT INTO "Property"(${propertyColumns.join(',')}) VALUES(${propertyValues.join(',')});`);
+      propertyStream.write(`\n${propertyValues.join(',')}`);
 
-
-      const imageColumns = new Set();
       const imagesEntries = [];
 
       for (let k = 0; k < faker.random.number({ min: 10, max: 20 }); k += 1) {
@@ -130,17 +141,26 @@ const seedPostgres = async () => {
 
         const imageValues = [];
 
-        Object.keys(image).forEach((key) => {
-          imageColumns.add(`"${key}"`);
-          imageValues.push(`$$${image[key]}$$`);
+        imageColumns.forEach((column) => {
+          imageValues.push(image[column]);
         });
 
-        imagesEntries.push(`(${imageValues.join(',')})`);
+        imagesEntries.push(`${imageValues.join(',')}`);
       }
 
-      await usePostgres.query(`INSERT INTO "Image"(${Array.from(imageColumns).join(',')}) VALUES${imagesEntries.join(',')};`);
+      imageStream.write(`\n${imagesEntries.join('\n')}`);
     }
   }
+
+  ownerStream.end();
+  propertyStream.end();
+  imageStream.end();
+
+  await usePostgres.query(`COPY "Owner"("username","firstName","lastName","email","phone") FROM '${path.join(__dirname, './output/owner.csv')}' DELIMITER ',' CSV HEADER`);
+
+  await usePostgres.query(`COPY "Property"("ownerId","address","active","listingPrice","sqft","beds","baths","listingDate") FROM '${path.join(__dirname, './output/property.csv')}' DELIMITER ',' CSV HEADER`);
+
+  await usePostgres.query(`COPY "Image"("propId", "imageUrl", "roomTag","description","views","dimensions","createdAt", "fileFormat") FROM '${path.join(__dirname, './output/image.csv')}' DELIMITER ',' CSV HEADER`);
 
   console.log(Date.now() - start);
 };

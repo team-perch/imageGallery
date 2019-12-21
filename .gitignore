@@ -25,5 +25,8 @@ build/
 dist/
 public/bundle.js
 
+# Seeding output csvs
+database/output/
+
 # Authentication
 authentication.js
