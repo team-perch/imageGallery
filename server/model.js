@@ -12,12 +12,12 @@ module.exports = {
       const values = [];
       Object.keys(imageInfo).forEach((key) => {
         columns.push(`"${key}"`);
-        values.push(`"${imageInfo[key]}"`);
+        values.push(`'${imageInfo[key]}'`);
       });
 
       return usePostgres.query(
         `INSERT INTO "Image"("propId", ${columns.join(',')})
-        VALUES(${propertyId}, ${values.join(',')})`,
+        VALUES(${propertyId}, ${values.join(',')});`,
       );
     }
 
@@ -36,7 +36,7 @@ module.exports = {
 
   findProperty: (propertyId) => {
     if (process.env.DB === 'Postgres') {
-      return usePostgres.query(`SELECT * FROM "Property" WHERE "id" = ${propertyId}`);
+      return usePostgres.query(`SELECT * FROM "Property" WHERE "id" = ${propertyId};`);
     }
 
     if (process.env.DB === 'Mongo') {
@@ -52,7 +52,7 @@ module.exports = {
 
   findImages: (propertyId) => {
     if (process.env.DB === 'Postgres') {
-      return usePostgres.query(`SELECT * FROM "Image" WHERE "propId" = ${propertyId}`);
+      return usePostgres.query(`SELECT * FROM "Image" WHERE "propId" = ${propertyId};`);
     }
 
     if (process.env.DB === 'Mongo') {
@@ -70,10 +70,10 @@ module.exports = {
     if (process.env.DB === 'Postgres') {
       const toSet = [];
       Object.keys(newInfo).forEach((key) => {
-        toSet.push(`"${key}" = "${newInfo[key]}"`);
+        toSet.push(`"${key}" = '${newInfo[key]}'`);
       });
 
-      return usePostgres.query(`UPDATE "Image" SET ${toSet.join(',')} WHERE "id" = ${imageId}`);
+      return usePostgres.query(`UPDATE "Image" SET ${toSet.join(',')} WHERE "id" = ${imageId};`);
     }
 
     if (process.env.DB === 'Mongo') {
@@ -86,7 +86,7 @@ module.exports = {
 
   deleteImage: (propertyId, imageId) => {
     if (process.env.DB === 'Postgres') {
-      return usePostgres.query(`DELETE FROM "Image" WHERE "id" = ${imageId}`);
+      return usePostgres.query(`DELETE FROM "Image" WHERE "id" = ${imageId};`);
     }
 
     if (process.env.DB === 'Mongo') {

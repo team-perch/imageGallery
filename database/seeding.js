@@ -4,10 +4,20 @@ const axios = require('axios');
 const convert = require('xml-js');
 const path = require('path');
 const fs = require('fs');
+const cliProgress = require('cli-progress');
+const { MongoClient } = require('mongodb');
 const usePostgres = require('./postgresDB.js');
 
 
-const primaryRecords = 5;
+const primaryRecords = 1000000;
+
+
+const b1 = new cliProgress.SingleBar({
+  format: 'Seeding Progress |' + '{bar}' + '| {percentage}%',
+  barCompleteChar: '\u2588',
+  barIncompleteChar: '\u2591',
+  hideCursor: true,
+});
 
 
 const getKeys = async (room) => {
@@ -165,4 +175,50 @@ const seedPostgres = async () => {
   console.log(Date.now() - start);
 };
 
+
+const seedMongo = async () => {
+  b1.start(100, 0);
+  const start = Date.now();
+
+  const client = await MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true });
+  const db = client.db('imageGallery');
+  let bulk = db.collection('property').initializeUnorderedBulkOp();
+
+  await db.collection('property').drop();
+  let count = 0;
+
+  for (let i = 1; i <= primaryRecords; i += 1) {
+    const property = createProperty();
+    property.id = i;
+    property.owner = createOwner();
+    property.images = [];
+
+    for (let j = 1; j <= faker.random.number({ min: 10, max: 20 }); j += 1) {
+      const image = await chooseImage(faker.random.arrayElement([
+        'Bathroom', 'Bedroom', 'Exterior', 'Kitchen', 'LivingRoom', 'Misc', 'Porch', 'Windows', 'Yard',
+      ]));
+      image.id = j;
+      image.createdAt = faker.date.between(property.listingDate, faker.date.recent());
+
+      property.images.push(image);
+    }
+
+    await bulk.insert(property);
+    count += 1;
+
+    if (count === 100000) {
+      count = 0;
+      await bulk.execute();
+      b1.increment();
+      bulk = db.collection('property').initializeUnorderedBulkOp();
+    }
+  }
+
+  client.close();
+  b1.stop();
+  console.log('Completed seeding!', Date.now() - start);
+};
+
+
 if (process.env.DB === 'Postgres') seedPostgres();
+if (process.env.DB === 'Mongo') seedMongo();
