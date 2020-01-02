@@ -10,7 +10,7 @@
     "build-dev": "webpack -d -w",
     "build": "webpack --mode='production'",
     "server-dev": "nodemon server/start.js",
-    "start": "node server/start.js",
+    "start": "DB=Postgres node server/start.js",
     "pg-schema": "psql -d postgres -a -f ./database/schema.sql",
     "seed-mongo": "DB=Mongo node database/seeding.js",
     "seed-postgres": "DB=Postgres node database/seeding.js",

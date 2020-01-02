@@ -10,11 +10,15 @@ module.exports = {
     const info = {};
     return Model.findProperty(propertyId)
       .then((property) => {
-        info.property = property;
+        info.property = property.rows[0];
         return Model.findImages(propertyId);
       })
       .then((images) => {
-        info.images = images;
+        const imageInfo = [];
+        images.rows.forEach((row) => {
+          imageInfo.push(row);
+        });
+        info.images = imageInfo;
         return info;
       })
       .catch((err) => err);
