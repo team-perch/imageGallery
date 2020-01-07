@@ -17,12 +17,12 @@ module.exports = {
 
 
   findProperty: (propertyId) => (
-    usePostgres.query(`SELECT * FROM "Property" WHERE "id" = ${propertyId};`);
+    usePostgres.query(`SELECT * FROM "Property" WHERE "id" = ${propertyId};`)
   ),
 
 
   findImages: (propertyId) => (
-    usePostgres.query(`SELECT * FROM "Image" WHERE "propId" = ${propertyId};`);
+    usePostgres.query(`SELECT * FROM "Image" WHERE "propId" = ${propertyId};`)
   ),
 
 
@@ -37,6 +37,6 @@ module.exports = {
 
 
   deleteImage: (propertyId, imageId) => (
-    usePostgres.query(`DELETE FROM "Image" WHERE "id" = ${imageId};`);
+    usePostgres.query(`DELETE FROM "Image" WHERE "id" = ${imageId};`)
   ),
 };
