@@ -47,7 +47,7 @@ class App extends React.Component {
     $.ajax({
       type: 'GET',
       // url: `${url}/api/images/${siteId}`,
-      url: `/api/images/${siteId}`,
+      url: `http://localhost:3003/api/images/${siteId}`,
       success: (data) => {
         const property = data;
         for (let i = 0; i < data.images.length; i += 1) {

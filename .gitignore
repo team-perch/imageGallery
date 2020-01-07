@@ -30,3 +30,6 @@ database/output/
 
 # Authentication
 authentication.js
+
+# newrelic config
+newrelic.js

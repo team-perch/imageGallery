@@ -1,0 +1,10 @@
+config:
+  target: 'http://localhost:3003'
+  phases:
+    - duration: 120
+      arrivalRate: 400
+  defaults:
+scenarios:
+  - flow:
+    - get:
+        url: "/api/images/{{$randomNumber(1,10000000)}}"

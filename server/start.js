@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+require('newrelic');
 const app = require('./server');
 
 const port = 3003;

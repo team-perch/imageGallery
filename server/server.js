@@ -41,11 +41,11 @@ app.get('/api/images/:propertyId', (req, res) => {
     });
 });
 
-app.put('/api/images/:propertyId/:imageId', (req, res) => {
+app.patch('/api/images/:propertyId/:imageId', (req, res) => {
   const { propertyId, imageId } = req.params;
-  const newInfo = req.body
+  const newInfo = req.body;
 
-  Controller.update(propertyId, imageId, newInfo)
+  Controller.updateImage(propertyId, imageId, newInfo)
     .then((image) => {
       res.status(200).send(image);
     })
@@ -57,7 +57,7 @@ app.put('/api/images/:propertyId/:imageId', (req, res) => {
 app.delete('/api/images/:propertyId/:imageId', (req, res) => {
   const { propertyId, imageId } = req.params;
 
-  Controller.destroy(propertyId, imageId)
+  Controller.deleteImage(propertyId, imageId)
     .then(() => {
       res.status(200).send();
     })

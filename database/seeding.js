@@ -5,18 +5,20 @@ const convert = require('xml-js');
 const path = require('path');
 const fs = require('fs');
 const cliProgress = require('cli-progress');
-const { MongoClient } = require('mongodb');
+// const { MongoClient } = require('mongodb');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const usePostgres = require('./postgresDB.js');
 
 
-const primaryRecords = 1000000;
+const primaryRecords = 10000000;
 
 
 const b1 = new cliProgress.SingleBar({
   format: 'Seeding Progress |' + '{bar}' + '| {percentage}%',
   barCompleteChar: '\u2588',
   barIncompleteChar: '\u2591',
-  hideCursor: true,
+  stopOnComplete: true,
 });
 
 
@@ -43,7 +45,7 @@ const keys = {
   LivingRoom: getKeys('LivingRoom'),
   Misc: getKeys('Misc'),
   Porch: getKeys('Porch'),
-  Window: getKeys('Windows'),
+  Windows: getKeys('Windows'),
   Yard: getKeys('Yard'),
 };
 
@@ -64,8 +66,8 @@ const createProperty = () => {
   const property = {
     address: faker.address.streetAddress('###'),
     active: faker.random.boolean(),
-    listingPrice: faker.random.number({ min: 1, max: 100000 }) * 1000,
-    sqft: faker.random.number({ min: 200, max: 100000 }),
+    listingPrice: faker.random.number({ min: 1, max: 10000 }) * 1000,
+    sqft: faker.random.number({ min: 200, max: 50000 }),
     beds: faker.random.number({ min: 0, max: 10 }),
     baths: faker.random.number({ min: 1, max: 10 }),
     listingDate: faker.date.past(3).toISOString().split('T')[0],
@@ -75,14 +77,14 @@ const createProperty = () => {
 };
 
 const chooseImage = async (room) => {
-  const roomKeys = await keys.Bathroom;
+  const roomKeys = await keys[room];
   const fileIndex = Math.floor(Math.random() * roomKeys.length);
 
   const image = {
     imageUrl: `https://perch-images.s3-us-west-1.amazonaws.com/${roomKeys[fileIndex]}`,
     roomTag: room,
-    description: faker.lorem.sentence(10),
-    views: faker.random.number({ min: 0, max: 999999 }),
+    description: faker.lorem.sentence(faker.random.number({ min: 3, max: 10 })),
+    views: faker.random.number({ min: 0, max: 99999 }),
     dimensions: `${faker.random.number({ min: 200, max: 3000 })}x${faker.random.number({ min: 200, max: 3000 })}`,
     fileFormat: roomKeys[fileIndex].split('.')[1],
   };
@@ -92,25 +94,22 @@ const chooseImage = async (room) => {
 
 
 const ownerColumns = ['username', 'firstName', 'lastName', 'email', 'phone'];
-
 const propertyColumns = ['ownerId', 'address', 'active', 'listingPrice', 'sqft', 'beds', 'baths', 'listingDate'];
-
 const imageColumns = ['propId', 'imageUrl', 'roomTag', 'description', 'views', 'dimensions', 'createdAt', 'fileFormat'];
 
 
 const seedPostgres = async () => {
+  b1.start(100, 0);
   const start = Date.now();
 
-  const ownerStream = fs.createWriteStream(path.join(__dirname, './output/owner.csv'), { flags: 'w' });
-  ownerStream.write(ownerColumns.join(','));
-  const propertyStream = fs.createWriteStream(path.join(__dirname, './output/property.csv'), { flags: 'w' });
-  propertyStream.write(propertyColumns.join(','));
-  const imageStream = fs.createWriteStream(path.join(__dirname, './output/image.csv'), { flags: 'w' });
-  imageStream.write(imageColumns.join(','));
+  fs.writeFileSync(path.join(__dirname, './output/owner.csv'), ownerColumns.join(','));
+  fs.writeFileSync(path.join(__dirname, './output/property.csv'), propertyColumns.join(','));
+  fs.writeFileSync(path.join(__dirname, './output/image0.csv'), imageColumns.join(','));
 
-
-  let count = 0;
-  for (let i = 1; count <= primaryRecords; i += 1) {
+  let primaryCount = 0;
+  let progressCount = 0;
+  let imageFile = 0;
+  for (let i = 1; primaryCount <= primaryRecords; i += 1) {
     const owner = createOwner();
     const ownerValues = [];
 
@@ -118,15 +117,13 @@ const seedPostgres = async () => {
       ownerValues.push(owner[column]);
     });
 
-    ownerStream.write(`\n${ownerValues.join(',')}`);
+    fs.appendFileSync(path.join(__dirname, './output/owner.csv'), `\n${ownerValues.join(',')}`);
 
     const homesOwned = Math.ceil(
       faker.random.number({ min: 1, max: 50 }) / faker.random.number({ min: 1, max: 50 }),
     );
 
-    count += homesOwned;
-
-    for (let j = 0; j < homesOwned; j += 1) {
+    for (let j = 1; j <= homesOwned; j += 1) {
       const property = createProperty();
       property.ownerId = i;
       const propertyValues = [];
@@ -135,15 +132,16 @@ const seedPostgres = async () => {
         propertyValues.push(property[column]);
       });
 
-      propertyStream.write(`\n${propertyValues.join(',')}`);
+      fs.appendFileSync(path.join(__dirname, './output/property.csv'), `\n${propertyValues.join(',')}`);
 
       const imagesEntries = [];
+      const numberOfImages = faker.random.number({ min: 8, max: 12 });
 
-      for (let k = 0; k < faker.random.number({ min: 10, max: 20 }); k += 1) {
+      for (let k = 0; k < numberOfImages; k += 1) {
         const image = await chooseImage(faker.random.arrayElement([
           'Bathroom', 'Bedroom', 'Exterior', 'Kitchen', 'LivingRoom', 'Misc', 'Porch', 'Windows', 'Yard',
         ]));
-        image.propId = i;
+        image.propId = primaryCount + j;
         image.createdAt = faker.date.between(
           property.listingDate,
           faker.date.recent(),
@@ -158,67 +156,79 @@ const seedPostgres = async () => {
         imagesEntries.push(`${imageValues.join(',')}`);
       }
 
-      imageStream.write(`\n${imagesEntries.join('\n')}`);
-    }
-  }
-
-  ownerStream.end();
-  propertyStream.end();
-  imageStream.end();
-
-  await usePostgres.query(`COPY "Owner"("username","firstName","lastName","email","phone") FROM '${path.join(__dirname, './output/owner.csv')}' DELIMITER ',' CSV HEADER`);
-
-  await usePostgres.query(`COPY "Property"("ownerId","address","active","listingPrice","sqft","beds","baths","listingDate") FROM '${path.join(__dirname, './output/property.csv')}' DELIMITER ',' CSV HEADER`);
-
-  await usePostgres.query(`COPY "Image"("propId", "imageUrl", "roomTag","description","views","dimensions","createdAt", "fileFormat") FROM '${path.join(__dirname, './output/image.csv')}' DELIMITER ',' CSV HEADER`);
-
-  console.log(Date.now() - start);
-};
-
-
-const seedMongo = async () => {
-  b1.start(100, 0);
-  const start = Date.now();
-
-  const client = await MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true });
-  const db = client.db('imageGallery');
-  let bulk = db.collection('property').initializeUnorderedBulkOp();
-
-  await db.collection('property').drop();
-  let count = 0;
-
-  for (let i = 1; i <= primaryRecords; i += 1) {
-    const property = createProperty();
-    property.id = i;
-    property.owner = createOwner();
-    property.images = [];
-
-    for (let j = 1; j <= faker.random.number({ min: 10, max: 20 }); j += 1) {
-      const image = await chooseImage(faker.random.arrayElement([
-        'Bathroom', 'Bedroom', 'Exterior', 'Kitchen', 'LivingRoom', 'Misc', 'Porch', 'Windows', 'Yard',
-      ]));
-      image.id = j;
-      image.createdAt = faker.date.between(property.listingDate, faker.date.recent());
-
-      property.images.push(image);
+      fs.appendFileSync(path.join(__dirname, `./output/image${imageFile}.csv`), `\n${imagesEntries.join('\n')}`);
     }
 
-    await bulk.insert(property);
-    count += 1;
+    primaryCount += homesOwned;
 
-    if (count === 100000) {
-      count = 0;
-      await bulk.execute();
+    if (Math.floor(primaryCount / 100000) > progressCount) {
+      // await exec(`psql -h 13.57.227.181 -d imagegallery -U student '\copy "Owner"("username","firstName","lastName","email","phone") FROM '${path.join(__dirname, './output/owner.csv')}' DELIMITER ',' CSV HEADER'`);
+
+      // await exec(`psql -h 13.57.227.181 -d imagegallery -U student '\copy "Property"("ownerId","address","active","listingPrice","sqft","beds","baths","listingDate") FROM '${path.join(__dirname, './output/property.csv')}' DELIMITER ',' CSV HEADER'`);
+
+      // await exec(`psql -h 13.57.227.181 -d imagegallery -U student '\copy "Image"("propId","imageUrl","roomTag","description","views","dimensions","createdAt","fileFormat") FROM '${path.join(__dirname, './output/image.csv')}' DELIMITER ',' CSV HEADER'`);
+
+      // fs.writeFileSync(path.join(__dirname, './output/owner.csv'), ownerColumns.join(','));
+      // fs.writeFileSync(path.join(__dirname, './output/property.csv'), propertyColumns.join(','));
+      progressCount += 1;
+
+      if (progressCount % 25 === 0) {
+        imageFile = progressCount / 25;
+        fs.writeFileSync(path.join(__dirname, `./output/image${imageFile}.csv`), imageColumns.join(','));
+      }
+
       b1.increment();
-      bulk = db.collection('property').initializeUnorderedBulkOp();
     }
   }
 
-  client.close();
-  b1.stop();
-  console.log('Completed seeding!', Date.now() - start);
+  const seedTime = Date.now() - start;
+  console.log('Completed seeding!', `${Math.floor(seedTime / 60000)}m ${Math.floor((seedTime / 1000) % 60)}s`);
 };
-
 
 if (process.env.DB === 'Postgres') seedPostgres();
-if (process.env.DB === 'Mongo') seedMongo();
+
+// const seedMongo = async () => {
+//   b1.start(100, 0);
+//   const start = Date.now();
+
+//   const client = await MongoClient.connect('mongodb://localhost:27017', { useUnifiedTopology: true });
+//   const db = client.db('imageGallery');
+//   let bulk = db.collection('property').initializeUnorderedBulkOp();
+
+//   await db.collection('property').drop();
+//   let count = 0;
+
+//   for (let i = 1; i <= primaryRecords; i += 1) {
+//     const property = createProperty();
+//     property._id = i;
+//     property.owner = createOwner();
+//     property.images = [];
+
+//     for (let j = 1; j <= faker.random.number({ min: 10, max: 20 }); j += 1) {
+//       const image = await chooseImage(faker.random.arrayElement([
+//         'Bathroom', 'Bedroom', 'Exterior', 'Kitchen', 'LivingRoom', 'Misc', 'Porch', 'Windows', 'Yard',
+//       ]));
+//       image.id = j;
+//       image.createdAt = faker.date.between(property.listingDate, faker.date.recent());
+
+//       property.images.push(image);
+//     }
+
+//     await bulk.insert(property);
+//     count += 1;
+
+//     if (count === 100000) {
+//       count = 0;
+//       await bulk.execute();
+//       b1.increment();
+//       bulk = db.collection('property').initializeUnorderedBulkOp();
+//     }
+//   }
+
+//   const seedTime = Date.now() - start;
+//   client.close();
+//   b1.stop();
+//   console.log('Completed seeding!', `${Math.floor(seedTime / 60000)}m ${Math.floor((seedTime / 1000) % 60)}s`);
+// };
+
+// if (process.env.DB === 'Mongo') seedMongo();
